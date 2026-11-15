@@ -1,0 +1,178 @@
+@import "tailwindcss";
+@import "@fontsource/anton";
+@import "@fontsource-variable/space-grotesk";
+@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource-variable/playfair-display/wght-italic.css";
+
+/* Token dari desain Figma: hitam arang, merah menyala, teks krem/salmon,
+   display Anton, UI Space Grotesk, label mono, aksen serif italic. */
+@theme {
+  --color-ink: #0c0c0c;
+  --color-base: #111111;
+  --color-panel: #181818;
+  --color-panel-2: #1f1f1f;
+  --color-panel-3: #282828;
+  --color-line: #262626;
+  --color-line-2: #353535;
+
+  --color-cream: #efe9e3;
+  --color-rose: #e3c6c0;
+  --color-salmon: #f3b6aa;
+  --color-mute: #9a8d8a;
+  --color-dim: #6a6160;
+
+  --color-red: #e02626;
+  --color-red-hi: #f04438;
+  --color-red-deep: #7c1616;
+  --color-red-ink: #3a0e0e;
+
+  --font-sans: "Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Anton", "Impact", "Haettenschweiler", sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, Menlo, monospace;
+  --font-serif: "Playfair Display Variable", Georgia, serif;
+}
+
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+  /* tanpa ini, overflow milik body pindah ke viewport dan body tidak memotong apa pun */
+  overflow-x: clip;
+}
+body {
+  background: var(--color-base);
+  color: var(--color-rose);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+::selection {
+  background: var(--color-red);
+  color: #fff;
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-2) transparent;
+}
+:focus-visible {
+  outline: 2px solid var(--color-red-hi);
+  outline-offset: 2px;
+}
+
+/* Label mono berjarak lebar, dipakai di seluruh desain */
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-salmon);
+}
+@utility display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  line-height: 0.95;
+  letter-spacing: 0.005em;
+  color: var(--color-cream);
+}
+@utility panel {
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+}
+@utility field {
+  width: 100%;
+  background: var(--color-panel-2);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.7rem 0.9rem;
+  color: var(--color-cream);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field::placeholder {
+  color: var(--color-dim);
+}
+.field:focus {
+  border-color: var(--color-red);
+  box-shadow: 0 0 0 3px rgb(224 38 38 / 0.18);
+}
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 12px;
+  padding: 0.7rem 1.15rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, transform 0.1s, box-shadow 0.15s;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+@utility btn-red {
+  background: var(--color-red);
+  color: #fff;
+  box-shadow: 0 8px 28px -8px rgb(224 38 38 / 0.7);
+}
+.btn-red:hover {
+  background: var(--color-red-hi);
+}
+@utility btn-dark {
+  background: var(--color-panel-2);
+  color: var(--color-rose);
+}
+.btn-dark:hover {
+  background: var(--color-panel-3);
+  color: var(--color-cream);
+}
+@utility tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 6px;
+  background: var(--color-panel-3);
+  padding: 0.2rem 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  color: var(--color-rose);
+}
+@utility dot {
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--color-red);
+  box-shadow: 0 0 10px rgb(224 38 38 / 0.9);
+}
+
+/* Latar hero: merah gelap bergaris vertikal halus */
+.hero-bg {
+  background:
+    repeating-linear-gradient(90deg, rgb(0 0 0 / 0.16) 0 2px, transparent 2px 26px),
+    radial-gradient(ellipse 70% 80% at 50% 45%, #6d1212 0%, #3a0c0c 45%, #141010 80%, var(--color-base) 100%);
+}
+.hero-word {
+  background: linear-gradient(180deg, #e22a2a 0%, #d42424 48%, rgb(150 20 20 / 0.55) 72%, rgb(60 12 12 / 0) 96%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.red-glow {
+  background: radial-gradient(ellipse 60% 55% at 50% 40%, rgb(150 22 22 / 0.5), transparent 70%);
+}
+.quote-card {
+  background: linear-gradient(160deg, #8a1919 0%, #5d1010 55%, #3a0b0b 100%);
+}
