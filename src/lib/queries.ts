@@ -14,11 +14,17 @@ import type { Education, ProcessStep, Project, SiteSettings, Skill } from "@/lib
 // Publik: klien anon tanpa cookie, di-cache dengan tag.
 // ---------------------------------------------------------------------------
 
+// Tanpa log ini, kegagalan Supabase tak terlihat: situs diam-diam menampilkan data cadangan.
+function logFallback(table: string, error: { message: string }) {
+  console.error(`[supabase] ${table} gagal, memakai data cadangan: ${error.message}`);
+}
+
 export async function getSiteSettings(): Promise<SiteSettings> {
   "use cache";
   cacheLife("hours");
   cacheTag("settings");
-  const { data } = await createPublicClient().from("site_settings").select("*").eq("id", 1).maybeSingle();
+  const { data, error } = await createPublicClient().from("site_settings").select("*").eq("id", 1).maybeSingle();
+  if (error) logFallback("site_settings", error);
   return data ?? FALLBACK_SETTINGS;
 }
 
@@ -33,7 +39,7 @@ export async function getPublishedProjects(): Promise<Project[]> {
     .order("featured", { ascending: false })
     .order("sort_order", { ascending: true })
     .order("created_at", { ascending: false });
-  if (error) return FALLBACK_PROJECTS;
+  if (error) return logFallback("projects", error), FALLBACK_PROJECTS;
   return data ?? [];
 }
 
@@ -42,7 +48,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
   cacheLife("hours");
   cacheTag("projects");
   const { data, error } = await createPublicClient().from("projects").select("*").eq("slug", slug).maybeSingle();
-  if (error) return FALLBACK_PROJECTS.find((p) => p.slug === slug) ?? null;
+  if (error) return logFallback("projects", error), FALLBACK_PROJECTS.find((p) => p.slug === slug) ?? null;
   return data;
 }
 
@@ -51,7 +57,7 @@ export async function getEducation(): Promise<Education[]> {
   cacheLife("hours");
   cacheTag("education");
   const { data, error } = await createPublicClient().from("education").select("*").order("sort_order");
-  return error ? FALLBACK_EDUCATION : (data ?? []);
+  return error ? (logFallback("education", error), FALLBACK_EDUCATION) : (data ?? []);
 }
 
 export async function getSkills(): Promise<Skill[]> {
@@ -59,7 +65,7 @@ export async function getSkills(): Promise<Skill[]> {
   cacheLife("hours");
   cacheTag("skills");
   const { data, error } = await createPublicClient().from("skills").select("*").order("sort_order");
-  return error ? FALLBACK_SKILLS : (data ?? []);
+  return error ? (logFallback("skills", error), FALLBACK_SKILLS) : (data ?? []);
 }
 
 export async function getProcessSteps(): Promise<ProcessStep[]> {
@@ -67,7 +73,7 @@ export async function getProcessSteps(): Promise<ProcessStep[]> {
   cacheLife("hours");
   cacheTag("process");
   const { data, error } = await createPublicClient().from("process_steps").select("*").order("sort_order");
-  return error ? FALLBACK_PROCESS : (data ?? []);
+  return error ? (logFallback("process_steps", error), FALLBACK_PROCESS) : (data ?? []);
 }
 
 // ---------------------------------------------------------------------------
