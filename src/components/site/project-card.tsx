@@ -33,13 +33,13 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
       href={`/projects/${project.slug}`}
       className="group flex flex-col overflow-hidden rounded-2xl bg-panel transition-colors hover:bg-panel-2"
     >
-      <div className="relative aspect-[4/3] overflow-hidden">
+      <div className="relative aspect-video overflow-hidden bg-ink">
         {project.cover_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={project.cover_url}
             alt={`Tangkapan layar ${project.title}`}
-            className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            className="size-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : (
           <CoverPlaceholder />

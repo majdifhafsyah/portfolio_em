@@ -47,12 +47,13 @@ export default async function ProjectDetailPage({ params }: PageProps<"/projects
         </div>
       </header>
 
-      <div className="mt-10 aspect-[16/9] overflow-hidden rounded-2xl bg-panel">
+      {/* Gambar tampil utuh dengan rasio aslinya (tanpa crop). */}
+      <div className="mt-10 overflow-hidden rounded-2xl bg-panel">
         {project.cover_url ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={project.cover_url} alt={`Tangkapan layar ${project.title}`} className="size-full object-cover" />
+          <img src={project.cover_url} alt={`Tangkapan layar ${project.title}`} className="h-auto w-full" />
         ) : (
-          <CoverPlaceholder />
+          <div className="aspect-[16/9]"><CoverPlaceholder /></div>
         )}
       </div>
 
