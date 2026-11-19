@@ -1,11 +1,10 @@
 import Link from "next/link";
 import {
-  ArrowRight, Award, Braces, CloudCheck, FileText, FolderOpen, Gauge, GitBranch, IdCard, Plus, SquareTerminal, Star, Trash2, Archive,
+  ArrowRight, Award, Braces, CloudCheck, FileText, FolderOpen, Gauge, IdCard, Plus, SquareTerminal, Star, Trash2, Archive,
 } from "lucide-react";
 import { SettingsForm, type SettingsTab } from "@/components/admin/settings-form";
 import { CertificateForm } from "@/components/admin/certificate-form";
-import { PROCESS_ICONS } from "@/components/site/sections";
-import { addEducationAction, addProcessStepAction, addSkillAction, deleteListItemAction } from "@/lib/actions";
+import { addEducationAction, addSkillAction, deleteListItemAction } from "@/lib/actions";
 import { adminGetLists, adminGetProjects, adminGetSettings } from "@/lib/queries";
 import { cn, pad2 } from "@/lib/utils";
 
@@ -15,8 +14,7 @@ const TABS = [
   { key: "statistik", label: "Statistik Cepat", icon: Gauge },
   { key: "proyek", label: "Manajemen Proyek", icon: SquareTerminal },
   { key: "keahlian", label: "Bidang & Keahlian", icon: Braces },
-  { key: "proses", label: "Work Process & Edu", icon: GitBranch },
-  { key: "sertifikat", label: "Sertifikat", icon: Award },
+  { key: "proses", label: "Education & Sertifikat", icon: Award },
 ] as const;
 type TabKey = (typeof TABS)[number]["key"];
 
@@ -154,60 +152,30 @@ export default async function AdminDashboardPage({ searchParams }: PageProps<"/a
           </section>
         ) : null}
 
-        {tab === "sertifikat" ? (
-          <section className="panel p-7">
-            <p className="label">Credentials</p>
-            <h2 className="mt-1 text-2xl font-semibold text-cream">Sertifikat</h2>
-            <ul className="mt-6 space-y-3">
-              {lists.certificates.map((c) => (
-                <li key={c.id} className="flex items-center gap-3 rounded-xl bg-panel-2 p-3">
-                  {c.image_url ? <img src={c.image_url} alt="" className="size-12 shrink-0 rounded-lg object-cover" /> : null}
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-semibold text-cream">{c.title}</p>
-                    <p className="truncate text-sm text-mute">{c.issuer}</p>
-                  </div>
-                  <span className="font-mono text-xs tracking-[0.12em] text-salmon">{c.issued_at}</span>
-                  <DeleteButton table="certificates" id={c.id} label={c.title} />
-                </li>
-              ))}
-              {!lists.certificates.length ? <li className="text-mute">Belum ada sertifikat.</li> : null}
-            </ul>
-            <CertificateForm />
-          </section>
-        ) : null}
-
         {tab === "proses" ? (
           <div className="grid gap-5 xl:grid-cols-2">
             <section className="panel p-7">
-              <p className="label">Methodology</p>
-              <h2 className="mt-1 text-2xl font-semibold text-cream">Work Process</h2>
-              <ol className="mt-6 space-y-3">
-                {lists.process.map((s, i) => {
-                  const Icon = PROCESS_ICONS[s.icon] ?? PROCESS_ICONS.search;
-                  return (
-                    <li key={s.id} className="flex items-start gap-3 rounded-xl bg-panel-2 p-3">
-                      <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-panel-3 text-salmon"><Icon className="size-4" /></span>
-                      <div className="min-w-0 flex-1">
-                        <p className="label !text-cream"><span className="mr-2 text-salmon">{pad2(i + 1)}</span>{s.title}</p>
-                        <p className="mt-1 text-sm text-mute">{s.description}</p>
-                      </div>
-                      <DeleteButton table="process_steps" id={s.id} label={s.title} />
-                    </li>
-                  );
-                })}
-              </ol>
-              <form action={addProcessStepAction} className="mt-5 grid gap-3 sm:grid-cols-[1fr_auto]">
-                <input name="title" required aria-label="Judul langkah" placeholder="Judul langkah" className="field !bg-ink" />
-                <select name="icon" aria-label="Ikon" className="field !w-auto !bg-ink font-mono">
-                  {Object.keys(PROCESS_ICONS).map((k) => <option key={k} value={k}>{k}</option>)}
-                </select>
-                <textarea name="description" required aria-label="Deskripsi langkah" placeholder="Deskripsi singkat" rows={2} className="field !bg-ink sm:col-span-2" />
-                <button className="btn btn-dark sm:col-span-2"><Plus className="size-4" /> Tambah langkah</button>
-              </form>
+              <p className="label">Credentials</p>
+              <h2 className="mt-1 text-2xl font-semibold text-cream">Sertifikat</h2>
+              <ul className="mt-6 space-y-3">
+                {lists.certificates.map((c) => (
+                  <li key={c.id} className="flex items-center gap-3 rounded-xl bg-panel-2 p-3">
+                    {c.image_url ? <img src={c.image_url} alt="" className="size-12 shrink-0 rounded-lg object-cover" /> : null}
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-semibold text-cream">{c.title}</p>
+                      <p className="truncate text-sm text-mute">{c.issuer}</p>
+                    </div>
+                    <span className="font-mono text-xs tracking-[0.12em] text-salmon">{c.issued_at}</span>
+                    <DeleteButton table="certificates" id={c.id} label={c.title} />
+                  </li>
+                ))}
+                {!lists.certificates.length ? <li className="text-mute">Belum ada sertifikat.</li> : null}
+              </ul>
+              <CertificateForm />
             </section>
             <section className="panel p-7">
               <p className="label">Academic</p>
-              <h2 className="mt-1 text-2xl font-semibold text-cream">Education &amp; Sertifikasi</h2>
+              <h2 className="mt-1 text-2xl font-semibold text-cream">Education</h2>
               <ul className="mt-6 space-y-3">
                 {lists.education.map((ed) => (
                   <li key={ed.id} className="flex items-center gap-3 rounded-xl bg-panel-2 p-3">

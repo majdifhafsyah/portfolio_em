@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { FolderKanban, IdCard, Images, LayoutGrid, Settings, SquareTerminal } from "lucide-react";
+import { Award, FolderKanban, IdCard, Images, LayoutGrid, Settings, SquareTerminal } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV = [
@@ -10,6 +10,7 @@ const NAV = [
   { key: "bio", href: "/admin?tab=bio", label: "Profile & Bio", icon: IdCard },
   { key: "projects", href: "/admin/projects", label: "Projects Management", icon: FolderKanban },
   { key: "keahlian", href: "/admin?tab=keahlian", label: "Experience & Skills", icon: SquareTerminal },
+  { key: "proses", href: "/admin?tab=proses", label: "Education & Certificates", icon: Award },
   { key: "profil", href: "/admin?tab=profil", label: "Media/Photo Manager", icon: Images },
   { key: "statistik", href: "/admin?tab=statistik", label: "Settings", icon: Settings },
 ];
@@ -19,7 +20,7 @@ export function AdminNav({ horizontal = false }: { horizontal?: boolean }) {
   const tab = useSearchParams().get("tab");
   const current = pathname.startsWith("/admin/projects")
     ? "projects"
-    : tab && NAV.some((n) => n.key === tab) ? tab : tab === "proses" ? "keahlian" : "dashboard";
+    : tab && NAV.some((n) => n.key === tab) ? tab : "dashboard";
 
   return (
     <nav aria-label="Navigasi admin" className={cn(horizontal ? "flex gap-1 overflow-x-auto px-4 pb-4" : "flex flex-col gap-1 pr-5")}>

@@ -1,15 +1,10 @@
 import Link from "next/link";
 import {
-  ArrowRight, Award, Code2, Gauge, GitBranch, Globe, Mail, MapPin, Play, Quote, Rocket, Search, Zap,
+  ArrowRight, Gauge, Globe, Mail, MapPin, Play, Quote,
   type LucideIcon,
 } from "lucide-react";
-import type { Certificate, Education, ProcessStep, Project, SiteSettings, Skill } from "@/lib/types";
-import { pad2 } from "@/lib/utils";
+import type { Certificate, Education, Project, SiteSettings, Skill } from "@/lib/types";
 import { ProjectCard } from "@/components/site/project-card";
-
-export const PROCESS_ICONS: Record<string, LucideIcon> = {
-  search: Search, git: GitBranch, code: Code2, zap: Zap, rocket: Rocket,
-};
 
 export function SelectedProjects({ projects }: { projects: Project[] }) {
   return (
@@ -34,40 +29,9 @@ export function SelectedProjects({ projects }: { projects: Project[] }) {
   );
 }
 
-export function Certificates({ items }: { items: Certificate[] }) {
-  if (!items.length) return null;
-  return (
-    <section id="certificates" className="mx-auto max-w-[1280px] px-5 pb-12 lg:px-8">
-      <p className="label flex items-center gap-2"><Award className="size-4" /> Credentials</p>
-      <h2 className="mt-2 text-4xl font-bold uppercase tracking-tight text-cream">Certificates</h2>
-      <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((c) => {
-          const body = (
-            <>
-              {c.image_url ? <img src={c.image_url} alt={`Sertifikat ${c.title}`} loading="lazy" className="aspect-[4/3] w-full rounded-lg object-cover" /> : null}
-              <p className="mt-4 font-semibold text-cream">{c.title}</p>
-              <p className="text-sm text-mute">{c.issuer}</p>
-              <p className="mt-2 font-mono text-[13px] tracking-[0.12em] text-salmon">{c.issued_at}</p>
-            </>
-          );
-          return (
-            <li key={c.id}>
-              {c.credential_url ? (
-                <a href={c.credential_url} target="_blank" rel="noopener noreferrer" className="panel block p-4 transition-colors hover:border-red">{body}</a>
-              ) : (
-                <div className="panel p-4">{body}</div>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    </section>
-  );
-}
-
 export function AboutGrid({
-  settings, education, skills, process,
-}: { settings: SiteSettings; education: Education[]; skills: Skill[]; process: ProcessStep[] }) {
+  settings, education, skills, certificates,
+}: { settings: SiteSettings; education: Education[]; skills: Skill[]; certificates: Certificate[] }) {
   return (
     <section className="mx-auto grid max-w-[1280px] gap-5 px-5 pb-12 lg:grid-cols-[1fr_1.27fr_0.74fr] lg:px-8">
       {/* Education & Skills */}
@@ -107,30 +71,37 @@ export function AboutGrid({
           </div>
         </div>
       </div>
-
-      {/* Work Process */}
-      <div id="process" className="panel p-6">
-        <p className="label">Methodology</p>
-        <h2 className="mt-1 text-2xl font-bold uppercase tracking-tight text-cream">Work process</h2>
-        <ol className="relative mt-6 space-y-5 before:absolute before:bottom-4 before:left-[15px] before:top-4 before:w-px before:bg-line-2">
-          {process.map((step, i) => {
-            const Icon = PROCESS_ICONS[step.icon] ?? Search;
-            return (
-              <li key={step.id} className="relative flex gap-4">
-                <span className="relative z-10 grid size-8 shrink-0 place-items-center rounded-lg bg-panel-3 text-salmon">
-                  <Icon className="size-4" />
-                </span>
-                <div>
-                  <h3 className="label !text-[13px] !text-cream">
-                    <span className="mr-2 text-salmon">{pad2(i + 1)}</span>{step.title}
-                  </h3>
-                  <p className="mt-1 text-[15px] leading-relaxed text-mute">{step.description}</p>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
+      {/* Certificates */}
+      <div id="certificates" className="panel p-6">
+        <p className="label">Credentials</p>
+        <h2 className="mt-1 text-2xl font-bold uppercase tracking-tight text-cream">Certificates</h2>
+        {certificates.length ? (
+          <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+            {certificates.map((c) => {
+              const body = (
+                <>
+                  {c.image_url ? <img src={c.image_url} alt={`Sertifikat ${c.title}`} loading="lazy" className="aspect-[4/3] w-full rounded-lg object-cover" /> : null}
+                  <p className="mt-3 font-semibold leading-snug text-cream">{c.title}</p>
+                  <p className="text-sm text-mute">{c.issuer}</p>
+                  <p className="mt-1 font-mono text-[13px] tracking-[0.12em] text-salmon">{c.issued_at}</p>
+                </>
+              );
+              return (
+                <li key={c.id}>
+                  {c.credential_url ? (
+                    <a href={c.credential_url} target="_blank" rel="noopener noreferrer" className="block rounded-xl bg-panel-2 p-3 transition-colors hover:bg-panel-3">{body}</a>
+                  ) : (
+                    <div className="rounded-xl bg-panel-2 p-3">{body}</div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p className="mt-6 text-mute">Belum ada sertifikat.</p>
+        )}
       </div>
+
 
       {/* Quote */}
       <figure id="about" className="quote-card flex flex-col rounded-2xl p-7">
