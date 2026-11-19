@@ -129,6 +129,25 @@ export async function addEducationAction(formData: FormData) {
   revalidatePath("/admin");
 }
 
+export async function addCertificateAction(formData: FormData) {
+  const title = str(formData.get("title"));
+  const issuer = str(formData.get("issuer"));
+  const issued_at = str(formData.get("issued_at"));
+  const credential_url = str(formData.get("credential_url"));
+  const image_url = str(formData.get("image_url"));
+  if (!title || !issuer || !issued_at) return;
+  // Hanya http(s): mencegah javascript: lolos ke href publik.
+  const bad = (u: string) => u && !/^https?:\/\//.test(u);
+  if (bad(credential_url) || bad(image_url)) return;
+  const supabase = await requireAdmin();
+  await supabase.from("certificates").insert({
+    title, issuer, issued_at, credential_url: credential_url || null, image_url: image_url || null,
+    sort_order: Date.now() % 1_000_000,
+  });
+  updateTag("certificates");
+  revalidatePath("/admin");
+}
+
 export async function addProcessStepAction(formData: FormData) {
   const title = str(formData.get("title"));
   const description = str(formData.get("description"));
@@ -140,7 +159,7 @@ export async function addProcessStepAction(formData: FormData) {
   revalidatePath("/admin");
 }
 
-const LIST_TABLES = { skills: "skills", education: "education", process_steps: "process" } as const;
+const LIST_TABLES = { skills: "skills", education: "education", process_steps: "process", certificates: "certificates" } as const;
 
 export async function deleteListItemAction(formData: FormData) {
   const table = str(formData.get("table")) as keyof typeof LIST_TABLES;

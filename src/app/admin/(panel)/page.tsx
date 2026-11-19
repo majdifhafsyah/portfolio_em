@@ -1,8 +1,9 @@
 import Link from "next/link";
 import {
-  ArrowRight, Braces, CloudCheck, FileText, FolderOpen, Gauge, GitBranch, IdCard, Plus, SquareTerminal, Star, Trash2, Archive,
+  ArrowRight, Award, Braces, CloudCheck, FileText, FolderOpen, Gauge, GitBranch, IdCard, Plus, SquareTerminal, Star, Trash2, Archive,
 } from "lucide-react";
 import { SettingsForm, type SettingsTab } from "@/components/admin/settings-form";
+import { CertificateForm } from "@/components/admin/certificate-form";
 import { PROCESS_ICONS } from "@/components/site/sections";
 import { addEducationAction, addProcessStepAction, addSkillAction, deleteListItemAction } from "@/lib/actions";
 import { adminGetLists, adminGetProjects, adminGetSettings } from "@/lib/queries";
@@ -15,6 +16,7 @@ const TABS = [
   { key: "proyek", label: "Manajemen Proyek", icon: SquareTerminal },
   { key: "keahlian", label: "Bidang & Keahlian", icon: Braces },
   { key: "proses", label: "Work Process & Edu", icon: GitBranch },
+  { key: "sertifikat", label: "Sertifikat", icon: Award },
 ] as const;
 type TabKey = (typeof TABS)[number]["key"];
 
@@ -149,6 +151,28 @@ export default async function AdminDashboardPage({ searchParams }: PageProps<"/a
               <input name="name" required aria-label="Nama keahlian" placeholder="+ Tambah tech / tool…" className="field !bg-ink font-mono" />
               <button className="btn btn-dark">Insert tag</button>
             </form>
+          </section>
+        ) : null}
+
+        {tab === "sertifikat" ? (
+          <section className="panel p-7">
+            <p className="label">Credentials</p>
+            <h2 className="mt-1 text-2xl font-semibold text-cream">Sertifikat</h2>
+            <ul className="mt-6 space-y-3">
+              {lists.certificates.map((c) => (
+                <li key={c.id} className="flex items-center gap-3 rounded-xl bg-panel-2 p-3">
+                  {c.image_url ? <img src={c.image_url} alt="" className="size-12 shrink-0 rounded-lg object-cover" /> : null}
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-semibold text-cream">{c.title}</p>
+                    <p className="truncate text-sm text-mute">{c.issuer}</p>
+                  </div>
+                  <span className="font-mono text-xs tracking-[0.12em] text-salmon">{c.issued_at}</span>
+                  <DeleteButton table="certificates" id={c.id} label={c.title} />
+                </li>
+              ))}
+              {!lists.certificates.length ? <li className="text-mute">Belum ada sertifikat.</li> : null}
+            </ul>
+            <CertificateForm />
           </section>
         ) : null}
 

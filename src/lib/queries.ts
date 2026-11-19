@@ -8,7 +8,7 @@ import {
   FALLBACK_SETTINGS,
   FALLBACK_SKILLS,
 } from "@/lib/fallback";
-import type { Education, ProcessStep, Project, SiteSettings, Skill } from "@/lib/types";
+import type { Certificate, Education, ProcessStep, Project, SiteSettings, Skill } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
 // Publik: klien anon tanpa cookie, di-cache dengan tag.
@@ -58,6 +58,15 @@ export async function getEducation(): Promise<Education[]> {
   cacheTag("education");
   const { data, error } = await createPublicClient().from("education").select("*").order("sort_order");
   return error ? (logFallback("education", error), FALLBACK_EDUCATION) : (data ?? []);
+}
+
+export async function getCertificates(): Promise<Certificate[]> {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("certificates");
+  const { data, error } = await createPublicClient().from("certificates").select("*").order("sort_order", { ascending: false });
+  if (error) logFallback("certificates", error);
+  return data ?? [];
 }
 
 export async function getSkills(): Promise<Skill[]> {
@@ -114,14 +123,16 @@ export async function adminGetProject(id: string): Promise<Project | null> {
 
 export async function adminGetLists() {
   const supabase = await createClient();
-  const [education, skills, process] = await Promise.all([
+  const [education, skills, process, certificates] = await Promise.all([
     supabase.from("education").select("*").order("sort_order"),
     supabase.from("skills").select("*").order("sort_order"),
     supabase.from("process_steps").select("*").order("sort_order"),
+    supabase.from("certificates").select("*").order("sort_order", { ascending: false }),
   ]);
   return {
     education: (education.data ?? []) as Education[],
     skills: (skills.data ?? []) as Skill[],
     process: (process.data ?? []) as ProcessStep[],
+    certificates: (certificates.data ?? []) as Certificate[],
   };
 }

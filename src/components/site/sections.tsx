@@ -1,9 +1,9 @@
 import Link from "next/link";
 import {
-  ArrowRight, Code2, Gauge, GitBranch, Globe, Mail, MapPin, Play, Quote, Rocket, Search, Zap,
+  ArrowRight, Award, Code2, Gauge, GitBranch, Globe, Mail, MapPin, Play, Quote, Rocket, Search, Zap,
   type LucideIcon,
 } from "lucide-react";
-import type { Education, ProcessStep, Project, SiteSettings, Skill } from "@/lib/types";
+import type { Certificate, Education, ProcessStep, Project, SiteSettings, Skill } from "@/lib/types";
 import { pad2 } from "@/lib/utils";
 import { ProjectCard } from "@/components/site/project-card";
 
@@ -30,6 +30,37 @@ export function SelectedProjects({ projects }: { projects: Project[] }) {
       ) : (
         <p className="panel p-8 text-mute">Belum ada proyek yang dipublikasikan.</p>
       )}
+    </section>
+  );
+}
+
+export function Certificates({ items }: { items: Certificate[] }) {
+  if (!items.length) return null;
+  return (
+    <section id="certificates" className="mx-auto max-w-[1280px] px-5 pb-12 lg:px-8">
+      <p className="label flex items-center gap-2"><Award className="size-4" /> Credentials</p>
+      <h2 className="mt-2 text-4xl font-bold uppercase tracking-tight text-cream">Certificates</h2>
+      <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {items.map((c) => {
+          const body = (
+            <>
+              {c.image_url ? <img src={c.image_url} alt={`Sertifikat ${c.title}`} loading="lazy" className="aspect-[4/3] w-full rounded-lg object-cover" /> : null}
+              <p className="mt-4 font-semibold text-cream">{c.title}</p>
+              <p className="text-sm text-mute">{c.issuer}</p>
+              <p className="mt-2 font-mono text-[13px] tracking-[0.12em] text-salmon">{c.issued_at}</p>
+            </>
+          );
+          return (
+            <li key={c.id}>
+              {c.credential_url ? (
+                <a href={c.credential_url} target="_blank" rel="noopener noreferrer" className="panel block p-4 transition-colors hover:border-red">{body}</a>
+              ) : (
+                <div className="panel p-4">{body}</div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 }

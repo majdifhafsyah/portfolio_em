@@ -55,7 +55,11 @@ export type Project = {
 };
 
 export type Education = { id: string; title: string; institution: string; period: string; sort_order: number };
-export type Skill = { id: string; name: string; sort_order: number };
+export type Certificate = {
+  id: string; title: string; issuer: string; issued_at: string;
+  credential_url: string | null; image_url: string | null; sort_order: number;
+};
+export type Skill ={ id: string; name: string; sort_order: number };
 export type ProcessStep = { id: string; title: string; description: string; icon: string; sort_order: number };
 
 type Table<R, Req extends keyof R = never> = {
@@ -71,6 +75,7 @@ export type Database = {
       site_settings: Table<SiteSettings>;
       projects: Table<Project, "slug" | "title">;
       education: Table<Education, "title" | "institution" | "period">;
+      certificates: Table<Certificate, "title" | "issuer" | "issued_at">;
       skills: Table<Skill, "name">;
       process_steps: Table<ProcessStep, "title" | "description">;
       admins: Table<{ user_id: string; created_at: string }, "user_id">;
