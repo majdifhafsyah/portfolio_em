@@ -190,15 +190,8 @@ export function Contact({ settings }: { settings: SiteSettings }) {
           <span className="inline-block h-4 w-2 translate-y-0.5 animate-pulse bg-red" />
         </p>
         <div className="mt-4 aspect-[16/8] overflow-hidden rounded-lg bg-[#120e0e]">
-          {settings.workspace_image_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={settings.workspace_image_url} alt="Meja kerja" className="size-full object-cover" />
-          ) : (
-            <div className="red-glow relative size-full">
-              <div className="absolute bottom-[22%] left-1/2 h-[46%] w-[44%] -translate-x-1/2 rounded border border-white/10 bg-black/70" />
-              <div className="absolute bottom-[14%] left-[14%] right-[14%] h-1.5 rounded bg-red/70 shadow-[0_0_30px_6px_rgb(224_38_38/0.5)]" />
-            </div>
-          )}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={settings.workspace_image_url ?? "/images/workspace.jpg"} alt="Meja kerja" className="size-full object-cover" />
         </div>
         <p className="label mt-4 flex items-center gap-2 !text-rose"><i className="dot" /> Active workspace • {settings.location?.split(",")[0] ?? "Remote"}</p>
       </div>
