@@ -1,10 +1,10 @@
 import Link from "next/link";
 import {
-  ArrowRight, Award, Braces, CloudCheck, FileText, FolderOpen, Gauge, IdCard, Plus, SquareTerminal, Star, Trash2, Archive,
+  ArrowDown, ArrowRight, ArrowUp, Award, Braces, CloudCheck, FileText, FolderOpen, Gauge, IdCard, Plus, SquareTerminal, Star, Trash2, Archive,
 } from "lucide-react";
 import { SettingsForm, type SettingsTab } from "@/components/admin/settings-form";
 import { CertificateForm } from "@/components/admin/certificate-form";
-import { addEducationAction, addSkillAction, deleteListItemAction } from "@/lib/actions";
+import { addEducationAction, addSkillAction, deleteListItemAction, moveListItemAction } from "@/lib/actions";
 import { adminGetLists, adminGetProjects, adminGetSettings } from "@/lib/queries";
 import { cn, pad2 } from "@/lib/utils";
 
@@ -25,6 +25,21 @@ function DeleteButton({ table, id, label }: { table: string; id: string; label: 
       <input type="hidden" name="id" value={id} />
       <button aria-label={`Hapus ${label}`} className="grid size-8 place-items-center rounded-lg text-mute hover:bg-red-ink hover:text-salmon">
         <Trash2 className="size-4" />
+      </button>
+    </form>
+  );
+}
+
+function MoveButtons({ table, id, first, last }: { table: string; id: string; first: boolean; last: boolean }) {
+  return (
+    <form action={moveListItemAction} className="flex flex-col">
+      <input type="hidden" name="table" value={table} />
+      <input type="hidden" name="id" value={id} />
+      <button name="dir" value="up" disabled={first} aria-label="Naikkan" className="grid size-5 place-items-center rounded text-mute hover:text-cream disabled:opacity-25">
+        <ArrowUp className="size-3.5" />
+      </button>
+      <button name="dir" value="down" disabled={last} aria-label="Turunkan" className="grid size-5 place-items-center rounded text-mute hover:text-cream disabled:opacity-25">
+        <ArrowDown className="size-3.5" />
       </button>
     </form>
   );
@@ -158,8 +173,9 @@ export default async function AdminDashboardPage({ searchParams }: PageProps<"/a
               <p className="label">Credentials</p>
               <h2 className="mt-1 text-2xl font-semibold text-cream">Sertifikat</h2>
               <ul className="mt-6 space-y-3">
-                {lists.certificates.map((c) => (
+                {lists.certificates.map((c, i) => (
                   <li key={c.id} className="flex items-center gap-3 rounded-xl bg-panel-2 p-3">
+                    <MoveButtons table="certificates" id={c.id} first={i === 0} last={i === lists.certificates.length - 1} />
                     {c.image_url ? <img src={c.image_url} alt="" className="size-12 shrink-0 rounded-lg object-cover" /> : null}
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-semibold text-cream">{c.title}</p>
@@ -177,8 +193,9 @@ export default async function AdminDashboardPage({ searchParams }: PageProps<"/a
               <p className="label">Academic</p>
               <h2 className="mt-1 text-2xl font-semibold text-cream">Education</h2>
               <ul className="mt-6 space-y-3">
-                {lists.education.map((ed) => (
+                {lists.education.map((ed, i) => (
                   <li key={ed.id} className="flex items-center gap-3 rounded-xl bg-panel-2 p-3">
+                    <MoveButtons table="education" id={ed.id} first={i === 0} last={i === lists.education.length - 1} />
                     <div className="min-w-0 flex-1">
                       <p className="font-semibold text-cream">{ed.title}</p>
                       <p className="text-sm text-mute">{ed.institution}</p>

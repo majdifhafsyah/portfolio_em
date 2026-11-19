@@ -171,6 +171,24 @@ export async function deleteListItemAction(formData: FormData) {
   revalidatePath("/admin");
 }
 
+// Geser item ke atas/bawah: urutan tampil dinomori ulang 0..n lalu dua item ditukar.
+export async function moveListItemAction(formData: FormData) {
+  const table = str(formData.get("table")) as keyof typeof LIST_TABLES;
+  const id = str(formData.get("id"));
+  const dir = formData.get("dir") === "up" ? -1 : 1;
+  if (!id || !(table in LIST_TABLES)) return;
+  const supabase = await requireAdmin();
+  const { data } = await supabase.from(table).select("id").order("sort_order");
+  const ids = (data ?? []).map((r) => r.id as string);
+  const i = ids.indexOf(id);
+  const j = i + dir;
+  if (i < 0 || j < 0 || j >= ids.length) return;
+  [ids[i], ids[j]] = [ids[j], ids[i]];
+  await Promise.all(ids.map((rid, n) => supabase.from(table).update({ sort_order: n }).eq("id", rid)));
+  updateTag(LIST_TABLES[table]);
+  revalidatePath("/admin");
+}
+
 // ---------------------------------------------------------------------------
 // Projects
 // ---------------------------------------------------------------------------

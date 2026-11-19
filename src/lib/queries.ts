@@ -64,7 +64,7 @@ export async function getCertificates(): Promise<Certificate[]> {
   "use cache";
   cacheLife("hours");
   cacheTag("certificates");
-  const { data, error } = await createPublicClient().from("certificates").select("*").order("sort_order", { ascending: false });
+  const { data, error } = await createPublicClient().from("certificates").select("*").order("sort_order");
   if (error) logFallback("certificates", error);
   return data ?? [];
 }
@@ -127,7 +127,7 @@ export async function adminGetLists() {
     supabase.from("education").select("*").order("sort_order"),
     supabase.from("skills").select("*").order("sort_order"),
     supabase.from("process_steps").select("*").order("sort_order"),
-    supabase.from("certificates").select("*").order("sort_order", { ascending: false }),
+    supabase.from("certificates").select("*").order("sort_order"),
   ]);
   return {
     education: (education.data ?? []) as Education[],
