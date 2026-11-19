@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { SiteSettings } from "@/lib/types";
 import { initials } from "@/lib/utils";
@@ -32,8 +33,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
           </Link>
           <span className="hidden size-9 overflow-hidden rounded-full border border-line-2 bg-panel-2 sm:block">
             {settings.photo_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={settings.photo_url} alt="" className="size-full object-cover object-top" />
+              <Image src={settings.photo_url} alt="" width={72} height={72} className="size-full object-cover object-top" />
             ) : (
               <span className="grid size-full place-items-center font-mono text-[10px] text-salmon">
                 {initials(settings.full_name)}

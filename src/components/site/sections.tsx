@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight, Gauge, Globe, Mail, MapPin, Play, Quote,
@@ -80,7 +81,11 @@ export function AboutGrid({
             {certificates.map((c) => {
               const body = (
                 <>
-                  {c.image_url ? <img src={c.image_url} alt={`Sertifikat ${c.title}`} loading="lazy" className="aspect-[4/3] w-full rounded-lg object-cover" /> : null}
+                  {c.image_url ? (
+                    <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
+                      <Image src={c.image_url} alt={`Sertifikat ${c.title}`} fill sizes="(min-width: 1024px) 220px, 50vw" className="object-cover" />
+                    </div>
+                  ) : null}
                   <p className="mt-3 font-semibold leading-snug text-cream">{c.title}</p>
                   <p className="text-sm text-mute">{c.issuer}</p>
                   <p className="mt-1 font-mono text-[13px] tracking-[0.12em] text-salmon">{c.issued_at}</p>
@@ -194,7 +199,7 @@ export function Contact({ settings }: { settings: SiteSettings }) {
         </p>
         <div className="mt-4 aspect-[16/8] overflow-hidden rounded-lg bg-[#120e0e]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={settings.workspace_image_url ?? "/images/workspace.jpg"} alt="Meja kerja" className="size-full object-cover" />
+          <img src={settings.workspace_image_url ?? "/images/workspace.jpg"} alt="Meja kerja" loading="lazy" className="size-full object-cover" />
         </div>
         <p className="label mt-4 flex items-center gap-2 !text-rose"><i className="dot" /> Active workspace • {settings.location?.split(",")[0] ?? "Remote"}</p>
       </div>

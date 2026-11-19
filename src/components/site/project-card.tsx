@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Project } from "@/lib/types";
@@ -35,11 +36,12 @@ export function ProjectCard({ project, index }: { project: Project; index: numbe
     >
       <div className="relative aspect-video overflow-hidden bg-ink">
         {project.cover_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={project.cover_url}
             alt={`Tangkapan layar ${project.title}`}
-            className="size-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
+            fill
+            sizes="(min-width: 1024px) 400px, (min-width: 768px) 50vw, 100vw"
+            className="object-contain transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : (
           <CoverPlaceholder />

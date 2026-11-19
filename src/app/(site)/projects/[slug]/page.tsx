@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, BookOpen, Code2, ExternalLink, Lock } from "lucide-react";
@@ -50,8 +51,8 @@ export default async function ProjectDetailPage({ params }: PageProps<"/projects
       {/* Gambar tampil utuh dengan rasio aslinya (tanpa crop). */}
       <div className="mt-10 overflow-hidden rounded-2xl bg-panel">
         {project.cover_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={project.cover_url} alt={`Tangkapan layar ${project.title}`} className="h-auto w-full" />
+          // width/height hanya petunjuk rasio (16:9); tampilan tetap mengikuti rasio asli gambar.
+          <Image src={project.cover_url} alt={`Tangkapan layar ${project.title}`} width={1600} height={900} preload sizes="(min-width: 1024px) 1100px, 100vw" className="h-auto w-full" />
         ) : (
           <div className="aspect-[16/9]"><CoverPlaceholder /></div>
         )}
@@ -91,8 +92,7 @@ export default async function ProjectDetailPage({ params }: PageProps<"/projects
       {project.gallery_urls.length ? (
         <div className="mt-10 grid gap-5 sm:grid-cols-2">
           {project.gallery_urls.map((url) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img key={url} src={url} alt="" className="w-full rounded-2xl bg-panel object-cover" />
+            <Image key={url} src={url} alt="" width={1200} height={750} sizes="(min-width: 640px) 50vw, 100vw" className="h-auto w-full rounded-2xl bg-panel object-cover" />
           ))}
         </div>
       ) : null}

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, FolderOpen, Globe, Sparkles, Terminal } from "lucide-react";
 import type { SiteSettings } from "@/lib/types";
@@ -39,11 +40,14 @@ export function Hero({ settings }: { settings: SiteSettings }) {
         {/* Foto */}
         <div className="pointer-events-none absolute inset-x-0 top-[2vw] flex h-[98vw] justify-center lg:bottom-0 lg:top-auto lg:h-[94%]">
           {settings.photo_url ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            // Elemen LCP: preload + resize. Ukuran asli tidak diketahui, jadi fill + contain.
+            <Image
               src={settings.photo_url}
               alt={`Foto ${settings.full_name}`}
-              className="h-full w-auto max-w-none object-contain object-bottom [mask-image:linear-gradient(to_bottom,#000_70%,transparent)] lg:[mask-image:none] drop-shadow-[0_0_40px_rgb(0_0_0/0.6)]"
+              fill
+              preload
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-contain object-bottom [mask-image:linear-gradient(to_bottom,#000_70%,transparent)] lg:[mask-image:none] drop-shadow-[0_0_40px_rgb(0_0_0/0.6)]"
             />
           ) : (
             <PhotoPlaceholder />
