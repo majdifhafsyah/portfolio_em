@@ -159,7 +159,10 @@ export function Contact({ settings }: { settings: SiteSettings }) {
           })}
         </ul>
         {settings.email ? (
-          <a href={`mailto:${settings.email}?subject=Project%20inquiry`} className="btn btn-red mt-6 !px-6 !py-3.5">
+          <a
+            href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(settings.email ?? "")}&su=Project%20inquiry`}
+            target="_blank" rel="noopener noreferrer" className="btn btn-red mt-6 !px-6 !py-3.5"
+          >
             <Play className="size-4" /> Initiate conversation
           </a>
         ) : null}
