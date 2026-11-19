@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { ArrowRight, FolderOpen, Globe, Sparkles, Terminal } from "lucide-react";
 import type { SiteSettings } from "@/lib/types";
 
@@ -40,13 +39,14 @@ export function Hero({ settings }: { settings: SiteSettings }) {
         {/* Foto */}
         <div className="pointer-events-none absolute inset-x-0 top-[2vw] flex h-[98vw] justify-center lg:bottom-0 lg:top-auto lg:h-[94%]">
           {settings.photo_url ? (
-            // Elemen LCP: preload + resize. Ukuran asli tidak diketahui, jadi fill + contain.
+            // Elemen LCP: prioritas tinggi + resize. Ukuran asli tidak diketahui, jadi fill + contain.
             <Image
               src={settings.photo_url}
               alt={`Foto ${settings.full_name}`}
               fill
-              preload
-              sizes="(min-width: 1024px) 50vw, 100vw"
+              fetchPriority="high"
+              loading="eager"
+              sizes="(min-width: 1024px) 40vw, 75vw"
               className="object-contain object-bottom [mask-image:linear-gradient(to_bottom,#000_70%,transparent)] lg:[mask-image:none] drop-shadow-[0_0_40px_rgb(0_0_0/0.6)]"
             />
           ) : (
@@ -66,12 +66,12 @@ export function Hero({ settings }: { settings: SiteSettings }) {
             </p>
             {settings.bio ? <p className="mt-4 max-w-[400px] text-[17px] leading-relaxed text-rose">{settings.bio}</p> : null}
             <div className="mt-6 flex flex-wrap items-center gap-3">
-              <Link href="/#contact" className="btn btn-red">
+              <a href="#contact" className="btn btn-red">
                 Let&apos;s build <ArrowRight className="size-4" />
-              </Link>
-              <Link href="/#projects" className="btn btn-dark">
+              </a>
+              <a href="#projects" className="btn btn-dark">
                 <FolderOpen className="size-4" /> Works
-              </Link>
+              </a>
             </div>
             {settings.location ? (
               <p className="mt-5 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-rose">

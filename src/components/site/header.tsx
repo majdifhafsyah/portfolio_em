@@ -28,7 +28,7 @@ export function SiteHeader({ settings }: { settings: SiteSettings }) {
         </div>
         <NavPills />
         <div className="flex items-center gap-3">
-          <Link href="/#contact" className="btn btn-red !rounded-full !py-2.5">
+          <Link href="/#contact" prefetch={false} className="btn btn-red !rounded-full !py-2.5">
             Get in touch
           </Link>
           <span className="hidden size-9 overflow-hidden rounded-full border border-line-2 bg-panel-2 sm:block">

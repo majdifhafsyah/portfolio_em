@@ -35,6 +35,7 @@ export function NavPills() {
         <Link
           key={n.id}
           href={`/#${n.id}`}
+          prefetch={false}
           className={cn(
             "rounded-xl px-4 py-2 font-mono text-[13px] tracking-[0.1em] transition-colors",
             active === n.id ? "bg-panel-3 font-semibold text-cream" : "text-rose hover:text-cream",

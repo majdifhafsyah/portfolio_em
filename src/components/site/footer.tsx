@@ -30,7 +30,7 @@ export async function SiteFooter({ settings }: { settings: SiteSettings }) {
               {l.label}
             </a>
           ))}
-          <Link href="/admin/login" className="ml-0 flex items-center gap-2 rounded-full bg-panel-2 px-4 py-1.5 font-mono text-xs uppercase tracking-[0.16em] text-rose transition-colors hover:text-cream lg:ml-10">
+          <Link href="/admin/login" prefetch={false} className="ml-0 flex items-center gap-2 rounded-full bg-panel-2 px-4 py-1.5 font-mono text-xs uppercase tracking-[0.16em] text-rose transition-colors hover:text-cream lg:ml-10">
             <LogIn className="size-3.5" /> Masuk
           </Link>
         </div>
